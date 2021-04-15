@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DormTowerMapper">
+    
+    <resultMap type="DormTower" id="DormTowerResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="img"    column="img"    />
+        <result property="isEnable"    column="is_enable"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectDormTowerVo">
+        select id, code, name, img, is_enable, create_by, create_time, update_by, update_time, remarks from dorm_tower
+    </sql>
+
+    <select id="selectDormTowerList" parameterType="DormTower" resultMap="DormTowerResult">
+        <include refid="selectDormTowerVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="img != null  and img != ''"> and img = #{img}</if>
+            <if test="isEnable != null  and isEnable != ''"> and is_enable = #{isEnable}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectDormTowerById" parameterType="Long" resultMap="DormTowerResult">
+        <include refid="selectDormTowerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDormTower" parameterType="DormTower" useGeneratedKeys="true" keyProperty="id">
+        insert into dorm_tower
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="name != null">name,</if>
+            <if test="img != null">img,</if>
+            <if test="isEnable != null">is_enable,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="img != null">#{img},</if>
+            <if test="isEnable != null">#{isEnable},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDormTower" parameterType="DormTower">
+        update dorm_tower
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="isEnable != null">is_enable = #{isEnable},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormTowerById" parameterType="Long">
+        delete from dorm_tower where id = #{id}
+    </delete>
+
+    <delete id="deleteDormTowerByIds" parameterType="String">
+        delete from dorm_tower where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="findTowerMap" resultType="Map">
+        <include refid="selectDormTowerVo"/>
+    </select>
+</mapper>

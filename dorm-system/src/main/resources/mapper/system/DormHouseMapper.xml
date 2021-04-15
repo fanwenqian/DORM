@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DormHouseMapper">
+    
+    <resultMap type="DormHouse" id="DormHouseResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="isUse"    column="is_use"    />
+        <result property="size"    column="size"    />
+        <result property="liveNum"    column="live_num"    />
+        <result property="img"    column="img"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remarks"    column="remarks"    />
+        <association property="towerId"    javaType="DormTower" >
+            <result column="tower_id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
+    </resultMap>
+
+    <sql id="selectDormHouseVo">
+        select a.id, a.code, a.tower_id, a.is_use, a.size, a.live_num, a.img, a.create_time, a.update_time, a.remarks,b.name from dorm_house a
+        left join dorm_tower b on a.tower_id = b.id
+    </sql>
+
+    <select id="selectDormHouseList" parameterType="DormHouse" resultMap="DormHouseResult">
+        <include refid="selectDormHouseVo"/>
+        <where>  
+            <if test="code != null  and code != ''"> and a.code = #{code}</if>
+            <if test="towerId != null and towerId.id!=null and towerId.id!=''"> and a.tower_id = #{towerId.id}</if>
+            <if test="isUse != null  and isUse != ''"> and a.is_use = #{isUse}</if>
+            <if test="size != null "> and a.size = #{size}</if>
+            <if test="liveNum != null "> and a.live_num = #{liveNum}</if>
+            <if test="img != null  and img != ''"> and a.img = #{img}</if>
+            <if test="remarks != null  and remarks != ''"> and a.remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectDormHouseById" parameterType="Long" resultMap="DormHouseResult">
+        <include refid="selectDormHouseVo"/>
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertDormHouse" parameterType="DormHouse" useGeneratedKeys="true" keyProperty="id">
+        insert into dorm_house
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="towerId != null and towerId.id!=null and towerId.id!=''">tower_id,</if>
+            <if test="isUse != null">is_use,</if>
+            <if test="size != null">size,</if>
+            <if test="liveNum != null">live_num,</if>
+            <if test="img != null">img,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="towerId != null and towerId.id!=null and towerId.id!=''">#{towerId.id},</if>
+            <if test="isUse != null">#{isUse},</if>
+            <if test="size != null">#{size},</if>
+            <if test="liveNum != null">#{liveNum},</if>
+            <if test="img != null">#{img},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDormHouse" parameterType="DormHouse">
+        update dorm_house
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="towerId != null and towerId.id!=null and towerId.id!=''">tower_id = #{towerId.id},</if>
+            <if test="isUse != null">is_use = #{isUse},</if>
+            <if test="size != null">size = #{size},</if>
+            <if test="liveNum != null">live_num = #{liveNum},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormHouseById" parameterType="Long">
+        delete from dorm_house where id = #{id}
+    </delete>
+
+    <delete id="deleteDormHouseByIds" parameterType="String">
+        delete from dorm_house where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
