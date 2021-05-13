@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DormAttendanceMapper">
+    
+    <resultMap type="DormAttendance" id="DormAttendanceResult">
+        <result property="id"    column="id"    />
+        <result property="studentId"    column="student_id"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectDormAttendanceVo">
+        select id, student_id, status, create_time from dorm_attendance
+    </sql>
+
+    <select id="selectDormAttendanceList" parameterType="DormAttendance" resultMap="DormAttendanceResult">
+        <include refid="selectDormAttendanceVo"/>
+        <where>  
+            <if test="studentId != null "> and student_id = #{studentId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectDormAttendanceById" parameterType="Long" resultMap="DormAttendanceResult">
+        <include refid="selectDormAttendanceVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDormAttendance" parameterType="DormAttendance" useGeneratedKeys="true" keyProperty="id">
+        insert into dorm_attendance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">student_id,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="studentId != null">#{studentId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDormAttendance" parameterType="DormAttendance">
+        update dorm_attendance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormAttendanceById" parameterType="Long">
+        delete from dorm_attendance where id = #{id}
+    </delete>
+
+    <delete id="deleteDormAttendanceByIds" parameterType="String">
+        delete from dorm_attendance where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

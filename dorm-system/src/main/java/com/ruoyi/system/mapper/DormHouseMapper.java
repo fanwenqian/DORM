@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.DormHouse;
 
 /**
@@ -58,4 +60,10 @@ public interface DormHouseMapper
      * @return 结果
      */
     public int deleteDormHouseByIds(String[] ids);
+
+    /**
+     * 获取宿舍map集合
+     * @return
+     */
+    List<Map<String, Object>> findHouseMap();
 }

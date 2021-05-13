@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DormToiletStatusMapper">
+    
+    <resultMap type="DormToiletStatus" id="DormToiletStatusResult">
+        <result property="id"    column="id"    />
+        <result property="houseId.id"    column="house_id"    />
+        <result property="toiletType"    column="toilet_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="remarks"    column="remarks"    />
+        <association property="houseId"    javaType="DormHouse" >
+            <result column="house_id" property="id"/>
+            <result column="code" property="code"/>
+            <association property="towerId" javaType="DormTower">
+                <result column="tower_id" property="id"/>
+                <result column="name" property="name"/>
+            </association>
+        </association>
+    </resultMap>
+
+    <sql id="selectDormToiletStatusVo">
+        select a.id, a.house_id,a.toilet_type, a.create_by, a.create_time, a.remarks, b.code,b.tower_id, c.name from dorm_toilet_status a
+        left join dorm_house b on a.house_id = b.id
+        left join dorm_tower c on c.id = b.tower_id
+    </sql>
+
+    <select id="selectDormToiletStatusList" parameterType="DormToiletStatus" resultMap="DormToiletStatusResult">
+        <include refid="selectDormToiletStatusVo"/>
+        <where>  
+            <if test="houseId.id != null "> and a.house_id = #{houseId.id}</if>
+            <if test="toiletType != null  and toiletType != ''"> and a.toilet_type = #{toiletType}</if>
+            <if test="createTimeStart != null and createTimeStart != ''"> and STR_TO_DATE(a.create_time, '%Y-%m-%d') >= STR_TO_DATE(#{createTimeStart}, '%Y-%m-%d')</if>
+            <if test="createTimeEnd != null and createTimeEnd != ''"> and  STR_TO_DATE(#{createTimeEnd}, '%Y-%m-%d') >= STR_TO_DATE(a.create_time, '%Y-%m-%d')</if>
+            <if test="remarks != null  and remarks != ''"> and a.remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectDormToiletStatusById" parameterType="Long" resultMap="DormToiletStatusResult">
+        <include refid="selectDormToiletStatusVo"/>
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertDormToiletStatus" parameterType="DormToiletStatus" useGeneratedKeys="true" keyProperty="id">
+        insert into dorm_toilet_status
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="houseId.id != null">house_id,</if>
+            <if test="toiletType != null">toilet_type,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remarks != null">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="houseId.id != null">#{houseId.id},</if>
+            <if test="toiletType != null">#{toiletType},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDormToiletStatus" parameterType="DormToiletStatus">
+        update dorm_toilet_status
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="houseId.id != null">house_id = #{houseId.id},</if>
+            <if test="toiletType != null">toilet_type = #{toiletType},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDormToiletStatusById" parameterType="Long">
+        delete from dorm_toilet_status where id = #{id}
+    </delete>
+
+    <delete id="deleteDormToiletStatusByIds" parameterType="String">
+        delete from dorm_toilet_status where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

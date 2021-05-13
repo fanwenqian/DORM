@@ -98,10 +98,10 @@ public class DormTowerServiceImpl implements IDormTowerService
     }
 
     /**
-     * 获取楼栋map
-     * @return map集合
-     */
-    public List<Map<String,Object>> findTowerKeyValue(){
-        return dormTowerMapper.findTowerMap();
-    }
+ * 获取楼栋map
+ * @return map集合
+ */
+public List<Map<String,Object>> findTowerKeyValue(){
+    return dormTowerMapper.findTowerMap();
+}
 }
