@@ -6,38 +6,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="DormAttendance" id="DormAttendanceResult">
         <result property="id"    column="id"    />
-        <result property="studentId"    column="student_id"    />
         <result property="status"    column="status"    />
         <result property="createTime"    column="create_time"    />
+        <association property="studentId"    javaType="DormStudent" >
+            <result column="student_id" property="id"/>
+            <result column="name" property="name"/>
+        </association>
     </resultMap>
 
     <sql id="selectDormAttendanceVo">
-        select id, student_id, status, create_time from dorm_attendance
+        select a.id, a.student_id, a.status, a.create_time, b.name from dorm_attendance a
+        left join dorm_student b on a.student_id = b.id
     </sql>
 
     <select id="selectDormAttendanceList" parameterType="DormAttendance" resultMap="DormAttendanceResult">
         <include refid="selectDormAttendanceVo"/>
         <where>  
-            <if test="studentId != null "> and student_id = #{studentId}</if>
-            <if test="status != null  and status != ''"> and status = #{status}</if>
-            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="studentId != null and studentId.id != null "> and a.student_id = #{studentId.id}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+            <if test="createTime != null "> and a.create_time = #{createTime}</if>
         </where>
     </select>
     
     <select id="selectDormAttendanceById" parameterType="Long" resultMap="DormAttendanceResult">
         <include refid="selectDormAttendanceVo"/>
-        where id = #{id}
+        where a.id = #{id}
     </select>
         
     <insert id="insertDormAttendance" parameterType="DormAttendance" useGeneratedKeys="true" keyProperty="id">
         insert into dorm_attendance
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="studentId != null">student_id,</if>
+            <if test="studentId.id != null">student_id,</if>
             <if test="status != null">status,</if>
             <if test="createTime != null">create_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="studentId != null">#{studentId},</if>
+            <if test="studentId.id != null">#{studentId.id},</if>
             <if test="status != null">#{status},</if>
             <if test="createTime != null">#{createTime},</if>
          </trim>
@@ -46,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateDormAttendance" parameterType="DormAttendance">
         update dorm_attendance
         <trim prefix="SET" suffixOverrides=",">
-            <if test="studentId != null">student_id = #{studentId},</if>
+            <if test="studentId.id != null">student_id = #{studentId.id},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
         </trim>

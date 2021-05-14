@@ -12,9 +12,9 @@
                         <ul>
                             <li>
                                 <label>学生id：</label>
-                                <select name="studentId">
+                                <select name="studentId.id">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option th:each="map,iter:${@dormStudentServiceImpl.findStudentKeyValue()}" th:value="${map.id}" th:text="${map.name}"></option>
                                 </select>
                             </li>
                             <li>
@@ -80,7 +80,7 @@
                     visible: false
                 },
                 {
-                    field: 'studentId',
+                    field: 'studentId.name',
                     title: '学生id'
                 },
                 {

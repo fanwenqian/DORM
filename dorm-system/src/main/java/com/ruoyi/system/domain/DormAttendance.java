@@ -20,7 +20,7 @@ public class DormAttendance extends BaseEntity
 
     /** 学生id */
     @Excel(name = "学生id")
-    private Long studentId;
+    private DormStudent studentId;
 
     /** 出勤状况 */
     @Excel(name = "出勤状况")
@@ -31,16 +31,16 @@ public class DormAttendance extends BaseEntity
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setStudentId(Long studentId) 
+    public void setStudentId(DormStudent studentId)
     {
         this.studentId = studentId;
     }
 
-    public Long getStudentId() 
+    public DormStudent getStudentId()
     {
         return studentId;
     }

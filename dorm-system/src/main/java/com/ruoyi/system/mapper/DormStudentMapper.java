@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+import java.util.Map;
+
 import com.ruoyi.system.domain.DormStudent;
 
 /**
@@ -58,4 +60,6 @@ public interface DormStudentMapper
      * @return 结果
      */
     public int deleteDormStudentByIds(String[] ids);
+
+    List<Map<String, Object>> findStudentMap();
 }

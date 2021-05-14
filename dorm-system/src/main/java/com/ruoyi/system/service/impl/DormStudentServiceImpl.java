@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.ruoyi.system.domain.DormHouse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import com.ruoyi.common.core.text.Convert;
  * @author zhumf
  * @date 2021-05-11
  */
-@Service
+@Service("dormStudentServiceImpl")
 public class DormStudentServiceImpl implements IDormStudentService
 {
     @Autowired
@@ -97,5 +98,13 @@ public class DormStudentServiceImpl implements IDormStudentService
     public int deleteDormStudentById(Long id)
     {
         return dormStudentMapper.deleteDormStudentById(id);
+    }
+
+    /**
+     * 获取学生map
+     * @return map集合
+     */
+    public List<Map<String,Object>> findStudentKeyValue() {
+        return dormStudentMapper.findStudentMap();
     }
 }
